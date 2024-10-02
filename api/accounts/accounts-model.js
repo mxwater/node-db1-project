@@ -1,29 +1,28 @@
 const db = require('../../data/db-config');
 
-const getAll = () => {
+function getAll() {
   return db('accounts');
 }
 
-const getById = id => {
+function getById(id) {
   return db('accounts')
-    .where('id', id)
-    .first();
+  .where({ id }).first()
 }
 
-const create = account => {
+function create(account) {
   return db('accounts')
     .insert(account)
     .then(([id]) => getById(id));
 }
 
-const updateById = (id, account) => {
+function updateById(id, account) {
   return db('accounts')
     .where('id', id)
     .update(account)  // Fixed: using "account" instead of "changes"
     .then(count => (count > 0 ? getById(id) : null));
 }
 
-const deleteById = id => {
+function deleteById(id) {
   return getById(id)
     .then(account => {
       if (!account) return null;
